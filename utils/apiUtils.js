@@ -20,16 +20,15 @@ export const request = async (endpoint, method = "GET", data = {}) => {
   // Token Authentication
   const token = localStorage.getItem("token");
   // console.log(token);
-  const auth = token ? localStorage.getItem("token") : "";
-  console.log(auth);
+  const auth = token ? "Bearer " + localStorage.getItem("token") : "";
   const response = await fetch(url, {
-    mode: "no-cors",
+    // mode: "no-cors",
     method: method,
     headers: {
       "Content-Type": "application/json",
       Authorization: auth.trim(),
     },
-    body: method !== "GET" ? data : null,
+    body: method !== "GET" ? payload : null,
   });
 
   if (response.ok) {
@@ -49,5 +48,5 @@ export const login = (username, password) => {
 };
 
 export const getCourses = () => {
-  return request("course", "GET");
+  return request("course/", "GET");
 };

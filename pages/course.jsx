@@ -3,8 +3,7 @@ import ButtonAppBar from "../components/Appbar";
 import BottomNav from "../components/BottomNav";
 import { getCourses } from "../utils/apiUtils";
 
-export default function Course() {
-  // console.log(data);
+export default function Course({ data }) {
   const fetchData = async () => {
     const data = await getCourses();
     console.log(data);
@@ -12,7 +11,7 @@ export default function Course() {
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   return (
     <div className="min-h-screen py-16">
       <ButtonAppBar title="Courses" />
@@ -23,23 +22,3 @@ export default function Course() {
     </div>
   );
 }
-
-// export async function getServerSideProps() {
-//   let returnVal;
-//   try {
-//     const data = await getCourses();
-//     returnVal = {
-//       props: {
-//         data,
-//       },
-//     };
-//   } catch (err) {
-//     console.log(err);
-//     returnVal = {
-//       props: {
-//         data: "Error",
-//       },
-//     };
-//   }
-//   return returnVal;
-// }
