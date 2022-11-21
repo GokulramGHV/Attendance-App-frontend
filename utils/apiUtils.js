@@ -50,3 +50,39 @@ export const login = (username, password) => {
 export const getCourses = () => {
   return request("course/", "GET");
 };
+
+export const createCourse = (data) => {
+  return request("course/", "POST", data);
+};
+
+export const getCourse = (id) => {
+  return request(`course/${id}/`, "GET");
+};
+
+export const getCourseStudents = (id) => {
+  return request(`course/${id}/students/`, "GET");
+};
+
+export const getTimetables = () => {
+  return request("timetable/", "GET");
+};
+
+export const createSession = (data) => {
+  return request("sessions/", "POST", data);
+};
+
+export const submitAttendance = (data) => {
+  return request("attendance/", "POST", data);
+};
+
+export const getCourseSessions = (id) => {
+  return request(`course/${id}/sessions/`, "GET");
+};
+
+export const getSessionAttendance = (id) => {
+  return request(`attendance/session/${id}/`, "GET");
+};
+
+export const submitBulkAttendance = (data) => {
+  return request(`bulkAttendance/`, "POST", data);
+};

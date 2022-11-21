@@ -9,23 +9,29 @@ export default function BottomNav({ routeNum }) {
         <BottomNavigationAction
           //   label="Home"
           onClick={() => {
-            router.push("home");
+            router.push("/home");
           }}
           icon={<i className="fa-solid fa-house w-5 h-5"></i>}
         />
         <BottomNavigationAction
           onClick={() => {
-            router.push("course");
+            router.push("/course");
           }}
           //   label="Courses"
           icon={<i className="fa-solid fa-book-bookmark w-5 h-5"></i>}
         />
         <BottomNavigationAction
+          onClick={() => {
+            router.push("/attendance");
+          }}
           //   label="Attendance"
           icon={<i className="fa-solid fa-clipboard-user w-5 h-5"></i>}
         />
         <BottomNavigationAction
           //   label="Timetable"
+          onClick={() => {
+            router.push("/timetable");
+          }}
           icon={<i className="fa-solid fa-calendar-days w-5 h-5"></i>}
         />
       </BottomNavigation>
