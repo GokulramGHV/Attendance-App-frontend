@@ -1,9 +1,10 @@
-import { Button } from "@mui/material";
+import { Button, ButtonBase } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import ButtonAppBar from "../../components/Appbar";
 import BottomNav from "../../components/BottomNav";
+import AddStudent from "../../components/AddStudent";
 import { getCourse, getCourseStudents } from "../../utils/apiUtils";
 
 export default function CourseDetails() {
@@ -21,20 +22,21 @@ export default function CourseDetails() {
   };
 
   useEffect(() => {
+    if (!id) return;
     fetchData();
   }, []);
 
   return (
     <>
       <ToastContainer />
-      <div className="min-h-screen py-16">
+      <div className="max-h-full py-16">
         <ButtonAppBar title="Courses" />
         <div className="grid gap-4 drop-shadow-lg mt-5">
           <p>{details.name}</p>
           <p>Course ID: {details.id}</p>
           <p>No. of students enrolled: {students.length}</p>
         </div>
-        <div className="grid gap-4 mt-5 drop-shadow-md px-10">
+        <div className="grid gap-4 mt-5 drop-shadow-md px-10 py-12">
           {students.map((student) => {
             return (
               <div
@@ -67,7 +69,10 @@ export default function CourseDetails() {
               </div>
             );
           })}
+
+          <AddStudent courseId={id} fetchData={fetchData}/>
         </div>
+
         <div className="fixed bg-white bottom-0 flex justify-center border-t-2 w-full">
           <BottomNav routeNum={1} />
         </div>
