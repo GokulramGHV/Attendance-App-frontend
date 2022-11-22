@@ -6,30 +6,41 @@ import ButtonAppBar from "../../components/Appbar";
 import BottomNav from "../../components/BottomNav";
 import { getCourses } from "../../utils/apiUtils";
 import "react-toastify/dist/ReactToastify.css";
+import Loading from "../../components/Loading";
 
 export default function Course() {
   const [courses, setCourses] = useState([]);
   const router = useRouter();
-
+  const [isLoading, setIsLoading] = useState(true);
   const fetchData = async () => {
-    const data = await getCourses();
-    setCourses(data);
+    try {
+      const data = await getCourses();
+      setCourses(data);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+      toast.error("Error in fetching data!");
+    }
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    let l = localStorage.getItem("course_created");
-    if (l === "true") {
-      toast.success("Course Created!");
-      localStorage.setItem("course_created", "false");
+    if (!localStorage.getItem("token")) {
+      router.push("/login");
+      return;
+    } else {
+      fetchData();
+      let l = localStorage.getItem("course_created");
+      if (l === "true") {
+        toast.success("Course Created!");
+        localStorage.setItem("course_created", "false");
+      }
     }
-  }, []);
+  }, [router]);
 
   return (
     <>
+      <Loading isLoading={isLoading} />
       <ToastContainer />
       <div className="min-h-screen py-16">
         <ButtonAppBar title="Courses" />

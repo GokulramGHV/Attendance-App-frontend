@@ -1,10 +1,11 @@
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import ButtonAppBar from "../../../../components/Appbar";
 import BottomNav from "../../../../components/BottomNav";
 import { getCourseSessions } from "../../../../utils/apiUtils";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ListSessions() {
   const router = useRouter();
@@ -16,6 +17,14 @@ export default function ListSessions() {
     console.log("Sessions: ", data);
     setSessions(data);
   };
+
+  useEffect(() => {
+    let l = localStorage.getItem("taken_attendance");
+    if (l === "true") {
+      toast.success("Attendance successfully recorded!");
+      localStorage.setItem("taken_attendance", "false");
+    }
+  }, []);
 
   useEffect(() => {
     if (!courseId) {
@@ -32,9 +41,17 @@ export default function ListSessions() {
         <Button
           variant="outlined"
           className="mx-10 mt-10"
-          onClick={() => router.push("/course/add")}
+          onClick={() => router.push(`/course/${courseId}`)}
         >
           View Students attendance
+        </Button>
+        <Button
+          variant="outlined"
+          className="mx-10 mt-10"
+          onClick={() => router.push(`/session/${courseId}/add`)}
+        >
+          <i className="fa fa-plus mr-2"></i>
+          Create New Session
         </Button>
         <div className="grid gap-4 drop-shadow-lg mt-5">
           {sessions.map((session, i) => {

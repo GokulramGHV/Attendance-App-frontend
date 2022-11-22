@@ -21,15 +21,22 @@ export default function CourseDetails() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (!id) return;
+    if (!localStorage.getItem("token")) {
+      router.push("/login");
+      return;
+    } else {
+      fetchData();
+    }
+  }, [id, router]);
 
   return (
     <>
       <ToastContainer />
       <div className="min-h-screen py-16">
         <ButtonAppBar title="Courses" />
-        <div className="grid gap-4 drop-shadow-lg mt-5">
+        <div className="grid gap-4 drop-shadow-lg mt-5 px-10">
+          <h2 className="text-xl font-bold">Course Details</h2>
           <p>{details.name}</p>
           <p>Course ID: {details.id}</p>
           <p>No. of students enrolled: {students.length}</p>

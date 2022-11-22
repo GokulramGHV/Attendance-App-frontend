@@ -67,6 +67,10 @@ export const getTimetables = () => {
   return request("timetable/", "GET");
 };
 
+export const createTimetableEntry = (data) => {
+  return request("timetable/", "POST", data);
+};
+
 export const createSession = (data) => {
   return request("sessions/", "POST", data);
 };
@@ -85,4 +89,8 @@ export const getSessionAttendance = (id) => {
 
 export const submitBulkAttendance = (data) => {
   return request(`bulkAttendance/`, "POST", data);
+};
+
+export const getStudent = (id) => {
+  return request(`student/${id}/`, "GET");
 };

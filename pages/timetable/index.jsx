@@ -1,11 +1,11 @@
 import { Button } from "@mui/material";
-import { data } from "autoprefixer";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import ButtonAppBar from "../../components/Appbar";
 import BottomNav from "../../components/BottomNav";
 import { getTimetables } from "../../utils/apiUtils";
+import "react-toastify/dist/ReactToastify.css";
 
 export const WEEK_DAYS = [
   "Monday",
@@ -28,8 +28,13 @@ export default function TimeTable() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (!localStorage.getItem("token")) {
+      router.push("/login");
+      return;
+    } else {
+      fetchData();
+    }
+  }, [router]);
 
   useEffect(() => {
     let l = localStorage.getItem("timetable_created");
@@ -38,6 +43,12 @@ export default function TimeTable() {
       localStorage.setItem("timetable_created", "false");
     }
   }, []);
+
+  const weekDaysTable = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };
+  timetables.forEach((timetable) => {
+    weekDaysTable[timetable.day].push(timetable);
+  });
+
   return (
     <>
       <ToastContainer />
@@ -52,21 +63,27 @@ export default function TimeTable() {
           Add Timetable Entry
         </Button>
         <div className="grid gap-4 drop-shadow-lg mt-5">
-          {timetables.map((elem, i) => {
-            return (
-              <div key={i}>
-                <h3 className="text-lg font-semibold mb-3 mx-10">
-                  {WEEK_DAYS[elem.day]}
-                </h3>
-                <div className="rounded-lg px-8 py-4 mx-10 shadow-md border-[2px] border-gray-200 mb-4">
-                  <p className="font-medium">{elem.course.name}</p>
-                  <div className="mt-1 text-gray-500 text-sm">
-                    {" "}
-                    {elem.start_time} - {elem.end_time}
-                  </div>
+          {WEEK_DAYS.map((day, i) => {
+            if (weekDaysTable[i].length > 0)
+              return (
+                <div key={i}>
+                  <h3 className="text-lg font-semibold mb-3 mx-10">{day}</h3>
+                  {weekDaysTable[i].map((elem, idx) => {
+                    return (
+                      <div
+                        key={idx}
+                        className="rounded-lg px-8 py-4 mx-10 shadow-md border-[2px] border-gray-200 mb-4"
+                      >
+                        <p className="font-medium">{elem.course.name}</p>
+                        <div className="mt-1 text-gray-500 text-sm">
+                          {" "}
+                          {elem.start_time} - {elem.end_time}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              </div>
-            );
+              );
           })}
         </div>
         <div className="fixed bg-white bottom-0 flex justify-center border-t-2 w-full">

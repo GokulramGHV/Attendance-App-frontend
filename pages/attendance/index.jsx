@@ -17,29 +17,19 @@ export default function AttendanceHome() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    let l = localStorage.getItem("course_created");
-    if (l === "true") {
-      toast.success("Course Created!");
-      localStorage.setItem("course_created", "false");
+    if (!localStorage.getItem("token")) {
+      router.push("/login");
+      return;
+    } else {
+      fetchData();
     }
-  }, []);
+  }, [router]);
 
   return (
     <>
       <ToastContainer />
       <div className="min-h-screen py-16">
         <ButtonAppBar title="Attendance" />
-        {/* <Button
-          variant="outlined"
-          className="mx-10 mt-10"
-          onClick={() => router.push("/course/add")}
-        >
-          View Students attendance
-        </Button> */}
         <div className="grid gap-4 drop-shadow-lg mt-5">
           {courses.map((course, i) => {
             return (

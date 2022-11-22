@@ -1,22 +1,23 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
-import ButtonAppBar from "../../../components/Appbar";
-import BottomNav from "../../../components/BottomNav";
+import { useCallback, useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import ButtonAppBar from "../../../../components/Appbar";
+import BottomNav from "../../../../components/BottomNav";
 import {
   createSession,
   getCourseStudents,
   submitAttendance,
   submitBulkAttendance,
-} from "../../../utils/apiUtils";
+} from "../../../../utils/apiUtils";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function TakeAttendance() {
   const router = useRouter();
-  const { courseId } = router.query;
+  const { courseId, sessionId } = router.query;
 
   const [courseStudents, setCourseStudents] = useState([]);
-  const [sessionId, setSessionId] = useState(17);
-  const fetchData = async () => {
+  // const [sessionId, setSessionId] = useState(17);
+  const fetchData = useCallback(async () => {
     const data = await getCourseStudents(courseId);
     // const session_data = await createSession({
     //   session: new Date(),
@@ -26,8 +27,19 @@ export default function TakeAttendance() {
     for (let i = 0; i < data.length; i++) {
       data[i]["absent"] = false;
     }
+    console.log(data);
     setCourseStudents(data);
-  };
+  }, [courseId]);
+
+  useEffect(() => {
+    if (!courseId || !sessionId) return;
+    if (!localStorage.getItem("token")) {
+      router.push("/login");
+      return;
+    } else {
+      fetchData();
+    }
+  }, [courseId, sessionId, router, fetchData]);
 
   const submit_attendance = async () => {
     let l = [];
@@ -42,14 +54,9 @@ export default function TakeAttendance() {
     const data = await submitBulkAttendance(l);
     console.log(data);
     console.log("Attendance Submitted!");
+    localStorage.setItem("taken_attendance", "true");
+    router.push(`/attendance/course/${courseId}`);
   };
-
-  useEffect(() => {
-    if (!courseId) {
-      return;
-    }
-    fetchData();
-  }, [courseId]);
 
   return (
     <>
