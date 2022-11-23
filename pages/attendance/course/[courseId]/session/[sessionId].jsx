@@ -7,6 +7,9 @@ import {
   getCourseStudents,
   getSessionAttendance,
 } from "../../../../../utils/apiUtils";
+import "react-toastify/dist/ReactToastify.css";
+import { Button } from "@mui/material";
+import axios from "axios";
 
 export default function ListSessions() {
   const router = useRouter();
@@ -54,7 +57,39 @@ export default function ListSessions() {
             </p>
             <p>No. of students absent: {absentStudents.length}</p>
             <p>Total no. of students: {allStudents.length}</p>
+            <Button
+              variant="outlined"
+              className="mt-5"
+              onClick={async () => {
+                axios
+                  .get(
+                    `http://127.0.0.1:8000/filetest/${courseId}/${sessionId}/`,
+                    {
+                      method: "GET",
+                      responseType: "blob", // important
+                      headers: {
+                        Authorization:
+                          "Bearer " + localStorage.getItem("token"),
+                      },
+                    }
+                  )
+                  .then((response) => {
+                    const url = window.URL.createObjectURL(
+                      new Blob([response.data])
+                    );
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.setAttribute("download", `${Date.now()}.xlsx`);
+                    document.body.appendChild(link);
+                    link.click();
+                  });
+              }}
+            >
+              <i className="fa fa-plus mr-2"></i>
+              Export Attendance
+            </Button>
           </div>
+
           {allStudents.map((student) => {
             return (
               <div

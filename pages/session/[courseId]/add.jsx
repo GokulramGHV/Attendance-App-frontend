@@ -52,6 +52,7 @@ export default function TimeTableAdd() {
             value={datetime}
             onChange={(e) => setDatetime(e.target.value)}
             className="w-full"
+            required
           />
           <ButtonBase
             type="submit"

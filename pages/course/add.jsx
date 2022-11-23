@@ -1,6 +1,6 @@
 import { ButtonBase, TextField } from "@mui/material";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import ButtonAppBar from "../../components/Appbar";
 import BottomNav from "../../components/BottomNav";
@@ -44,7 +44,7 @@ export default function AddCourse() {
     <>
       <Loading isLoading={isLoading} />
       <ToastContainer />
-      <ButtonAppBar title="Timetable" />
+      <ButtonAppBar title="Courses" />
       <div className="min-h-screen py-16 flex justify-center items-center px-10">
         <form onSubmit={submit} className="w-full grid gap-4">
           <h1 className="text-xl font-bold mb-4 text-center">

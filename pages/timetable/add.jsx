@@ -69,6 +69,7 @@ export default function TimeTableAdd() {
             value={timetableData.start_time}
             onChange={(e) => handleChange(e.target.value, "start_time")}
             className="w-full"
+            required
           />
           <TextField
             id="end_time"
@@ -78,6 +79,7 @@ export default function TimeTableAdd() {
             value={timetableData.end_time}
             onChange={(e) => handleChange(e.target.value, "end_time")}
             className="w-full"
+            required
           />
           <TextField
             id="day"
@@ -87,6 +89,7 @@ export default function TimeTableAdd() {
             className="w-full"
             value={timetableData.day}
             onChange={(e) => handleChange(e.target.value, "day")}
+            required
           >
             {WEEK_DAYS.map((day, i) => {
               return (
@@ -104,6 +107,7 @@ export default function TimeTableAdd() {
             value={timetableData.course}
             onChange={(e) => handleChange(e.target.value, "course")}
             className="w-full"
+            required
           >
             {courseList.map((course) => {
               return (

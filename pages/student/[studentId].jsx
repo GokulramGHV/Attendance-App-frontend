@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import ButtonAppBar from "../../components/Appbar";
 import BottomNav from "../../components/BottomNav";
 import { getStudent } from "../../utils/apiUtils";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function StudentDetails() {
   const router = useRouter();

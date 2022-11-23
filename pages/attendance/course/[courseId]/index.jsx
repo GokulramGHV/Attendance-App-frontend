@@ -19,19 +19,21 @@ export default function ListSessions() {
   };
 
   useEffect(() => {
-    let l = localStorage.getItem("taken_attendance");
-    if (l === "true") {
-      toast.success("Attendance successfully recorded!");
-      localStorage.setItem("taken_attendance", "false");
-    }
-  }, []);
-
-  useEffect(() => {
     if (!courseId) {
       return;
     }
-    fetchData();
-  }, [courseId]);
+    if (!localStorage.getItem("token")) {
+      router.push("/login");
+      return;
+    } else {
+      let l = localStorage.getItem("taken_attendance");
+      if (l === "true") {
+        toast.success("Attendance successfully recorded!");
+        localStorage.setItem("taken_attendance", "false");
+      }
+      fetchData();
+    }
+  }, [courseId, router]);
 
   return (
     <>

@@ -1,7 +1,12 @@
 // const API_BASE_URL = 'https://capstone-301-task-app.herokuapp.com/api/';
 const API_BASE_URL = "http://127.0.0.1:8000/";
 
-export const request = async (endpoint, method = "GET", data = {}) => {
+export const request = async (
+  endpoint,
+  method = "GET",
+  data = {},
+  response_type = "json"
+) => {
   let url;
   let payload;
   if (method === "GET") {
@@ -24,6 +29,7 @@ export const request = async (endpoint, method = "GET", data = {}) => {
   const response = await fetch(url, {
     // mode: "no-cors",
     method: method,
+    responseType: response_type,
     headers: {
       "Content-Type": "application/json",
       Authorization: auth.trim(),
@@ -93,4 +99,12 @@ export const submitBulkAttendance = (data) => {
 
 export const getStudent = (id) => {
   return request(`student/${id}/`, "GET");
+};
+
+export const createStudent = (data) => {
+  return request("student/", "POST", data);
+};
+
+export const filetest = (sid, cid) => {
+  return request(`filetest/${cid}/${sid}/`, "GET", {}, "blob");
 };

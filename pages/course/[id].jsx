@@ -1,12 +1,12 @@
 import { Button, ButtonBase } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import ButtonAppBar from "../../components/Appbar";
 import BottomNav from "../../components/BottomNav";
-import AddStudent from "../../components/AddStudent";
+// import AddStudent from "../../components/AddStudent";
 import { getCourse, getCourseStudents } from "../../utils/apiUtils";
-
+import "react-toastify/dist/ReactToastify.css";
 export default function CourseDetails() {
   const router = useRouter();
   const { id } = router.query;
@@ -27,6 +27,11 @@ export default function CourseDetails() {
       router.push("/login");
       return;
     } else {
+      let l = localStorage.getItem("student_created");
+      if (l === "true") {
+        toast.success("Student successfully created!");
+        localStorage.setItem("student_created", "false");
+      }
       fetchData();
     }
   }, [id, router]);
@@ -42,6 +47,14 @@ export default function CourseDetails() {
           <p>Course ID: {details.id}</p>
           <p>No. of students enrolled: {students.length}</p>
         </div>
+        <Button
+          variant="outlined"
+          className="mx-10 mt-10"
+          onClick={() => router.push(`/student/add/${id}`)}
+        >
+          <i className="fa fa-plus mr-2"></i>
+          Add Student
+        </Button>
         <div className="grid gap-4 mt-5 drop-shadow-md px-10 py-12">
           {students.map((student) => {
             return (
@@ -76,7 +89,7 @@ export default function CourseDetails() {
             );
           })}
 
-          <AddStudent courseId={id} fetchData={fetchData}/>
+          {/* <AddStudent courseId={id} fetchData={fetchData}/> */}
         </div>
 
         <div className="fixed bg-white bottom-0 flex justify-center border-t-2 w-full">
