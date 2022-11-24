@@ -62,7 +62,7 @@ export default function TakeAttendance() {
     <>
       <ToastContainer />
       <div className="min-h-screen py-16">
-        <ButtonAppBar title="Courses" />
+        <ButtonAppBar title="Attendance" />
         <div className="mt-5">
           {courseStudents.map((student) => {
             return (
