@@ -1,15 +1,16 @@
 import { ButtonBase, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import ButtonAppBar from "../../components/Appbar";
 import BottomNav from "../../components/BottomNav";
-import { createCourse, getCourses } from "../../utils/apiUtils";
+import { createCourse } from "../../utils/apiUtils";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "../../components/Loading";
 
 export default function AddCourse() {
   const [courseName, setCourseName] = useState("");
+  const [blockHours, setBlockHours] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -23,8 +24,16 @@ export default function AddCourse() {
   const submit = async (e) => {
     setIsLoading(true);
     e.preventDefault();
+    if (blockHours < 1) {
+      toast.error("Block hours cannot be less than 1!");
+      setIsLoading(false);
+      return;
+    }
     try {
-      const resp = await createCourse({ name: courseName });
+      const resp = await createCourse({
+        name: courseName,
+        block_hours: blockHours,
+      });
       localStorage.setItem("course_created", "true");
       router.push("/course");
     } catch (err) {
@@ -56,6 +65,15 @@ export default function AddCourse() {
             variant="outlined"
             value={courseName}
             onChange={(e) => setCourseName(e.target.value)}
+            className="w-full"
+          />
+          <TextField
+            id="blockHours"
+            label="Block Hours"
+            variant="outlined"
+            type="number"
+            value={blockHours}
+            onChange={(e) => setBlockHours(e.target.value)}
             className="w-full"
           />
           <ButtonBase

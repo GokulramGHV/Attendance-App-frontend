@@ -108,3 +108,7 @@ export const createStudent = (data) => {
 export const filetest = (sid, cid) => {
   return request(`filetest/${cid}/${sid}/`, "GET", {}, "blob");
 };
+
+export const all_sessions_attendance = (cid) => {
+  return request(`all_sessions_attendance/${cid}/`, "GET", {}, "blob");
+};

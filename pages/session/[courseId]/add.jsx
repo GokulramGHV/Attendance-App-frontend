@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function TimeTableAdd() {
   const [datetime, setDatetime] = useState("");
+  const [blockHours, setBlockHours] = useState(1);
   const router = useRouter();
   const { courseId } = router.query;
 
@@ -21,11 +22,17 @@ export default function TimeTableAdd() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (blockHours < 1) {
+      toast.error("Block hours cannot be less than 1!");
+      setIsLoading(false);
+      return;
+    }
     console.log("DateTime: ", datetime);
     try {
       const session_data = await createSession({
         session: datetime,
         course: courseId,
+        block_hours: blockHours,
       });
       console.log("Session Data: ", session_data);
       router.push(`/attendance/create/${courseId}/${session_data.id}/`);
@@ -53,6 +60,15 @@ export default function TimeTableAdd() {
             onChange={(e) => setDatetime(e.target.value)}
             className="w-full"
             required
+          />
+          <TextField
+            id="blockHours"
+            label="Block Hours"
+            variant="outlined"
+            type="number"
+            value={blockHours}
+            onChange={(e) => setBlockHours(e.target.value)}
+            className="w-full"
           />
           <ButtonBase
             type="submit"

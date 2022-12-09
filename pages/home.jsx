@@ -85,6 +85,7 @@ export default function Home() {
                               const session_data = await createSession({
                                 session: session_datetime,
                                 course: elem.course.id,
+                                block_hours: elem.course.block_hours,
                               });
                               console.log("session_data: ", session_data);
                               router.push(

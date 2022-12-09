@@ -4,8 +4,12 @@ import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import ButtonAppBar from "../../../../components/Appbar";
 import BottomNav from "../../../../components/BottomNav";
-import { getCourseSessions } from "../../../../utils/apiUtils";
+import {
+  // all_sessions_attendance,
+  getCourseSessions,
+} from "../../../../utils/apiUtils";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 export default function ListSessions() {
   const router = useRouter();
@@ -49,7 +53,37 @@ export default function ListSessions() {
         </Button>
         <Button
           variant="outlined"
-          className="mx-10 mt-10"
+          className="mx-10 mt-5"
+          onClick={async () => {
+            axios
+              .get(
+                `http://127.0.0.1:8000/all_sessions_attendance/${courseId}/`,
+                {
+                  method: "GET",
+                  responseType: "blob", // important
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                }
+              )
+              .then((response) => {
+                const url = window.URL.createObjectURL(
+                  new Blob([response.data])
+                );
+                const link = document.createElement("a");
+                link.href = url;
+                link.setAttribute("download", `${Date.now()}.xlsx`);
+                document.body.appendChild(link);
+                link.click();
+              });
+          }}
+        >
+          <i className="fa fa-download mr-2"></i>
+          Download Attendance
+        </Button>
+        <Button
+          variant="outlined"
+          className="mx-10 mt-5"
           onClick={() => router.push(`/session/${courseId}/add`)}
         >
           <i className="fa fa-plus mr-2"></i>
