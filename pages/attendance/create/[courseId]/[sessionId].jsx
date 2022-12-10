@@ -51,7 +51,7 @@ export default function TakeAttendance() {
         });
       }
     }
-    const data = await submitBulkAttendance(l);
+    const data = await submitBulkAttendance(l, courseId, sessionId);
     console.log(data);
     console.log("Attendance Submitted!");
     localStorage.setItem("taken_attendance", "true");

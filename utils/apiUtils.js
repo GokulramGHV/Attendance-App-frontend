@@ -93,8 +93,8 @@ export const getSessionAttendance = (id) => {
   return request(`attendance/session/${id}/`, "GET");
 };
 
-export const submitBulkAttendance = (data) => {
-  return request(`bulkAttendance/`, "POST", data);
+export const submitBulkAttendance = (data, cid, sid) => {
+  return request(`bulkAttendance/${cid}/${sid}/`, "POST", data);
 };
 
 export const getStudent = (id) => {
@@ -111,4 +111,8 @@ export const filetest = (sid, cid) => {
 
 export const all_sessions_attendance = (cid) => {
   return request(`all_sessions_attendance/${cid}/`, "GET", {}, "blob");
+};
+
+export const getUser = () => {
+  return request("auth/user/", "GET");
 };

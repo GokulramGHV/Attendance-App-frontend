@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import ButtonAppBar from "../../../components/Appbar";
 import BottomNav from "../../../components/BottomNav";
-import { createSession } from "../../../utils/apiUtils";
+import { createSession, getCourse } from "../../../utils/apiUtils";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function TimeTableAdd() {
@@ -18,7 +18,17 @@ export default function TimeTableAdd() {
       router.push("/login");
       return;
     }
-  }, [router]);
+    const fetchCourseData = async () => {
+      try {
+        const data = await getCourse(courseId);
+        setBlockHours(data.block_hours);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchCourseData();
+  }, [router, courseId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,7 +55,7 @@ export default function TimeTableAdd() {
   return (
     <>
       <ToastContainer />
-      <ButtonAppBar title="Timetable" />
+      <ButtonAppBar title="Attendance" />
       <div className="min-h-screen py-16 flex justify-center items-center px-10">
         <form onSubmit={handleSubmit} className="w-full grid gap-4">
           <h1 className="text-xl font-bold mb-4 text-center">
