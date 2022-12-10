@@ -1,12 +1,14 @@
 import { Button, ButtonBase } from "@mui/material";
+import SendIcon from '@mui/icons-material/Send';
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import ButtonAppBar from "../../components/Appbar";
 import BottomNav from "../../components/BottomNav";
 // import AddStudent from "../../components/AddStudent";
-import { getCourse, getCourseStudents } from "../../utils/apiUtils";
+import { getCourse, getCourseStudents, send_email } from "../../utils/apiUtils";
 import "react-toastify/dist/ReactToastify.css";
+import { AltRoute } from "@mui/icons-material";
 export default function CourseDetails() {
   const router = useRouter();
   const { id } = router.query;
@@ -36,6 +38,14 @@ export default function CourseDetails() {
     }
   }, [id, router, fetchData]);
 
+  const mail = async () => {
+    const resp = await send_email({
+      courseId: id
+    })
+    console.log(resp);
+    alert(resp.status==='ok' ? "Mails have been sent!" : "There were some issues sending the mails");
+  }
+
   return (
     <>
       <ToastContainer />
@@ -47,9 +57,16 @@ export default function CourseDetails() {
           <p>Course ID: {details.id}</p>
           <p>No. of students enrolled: {students.length}</p>
         </div>
-        <div className="flex flex-wrap mx-10 justify-left mt-5 gap-2">
-          {" "}
-          <Button
+        <div className="flex flex-col flex-wrap mx-10 justify-center items-center mt-5 gap-3">
+          <Button 
+            style={{ width: "80%", height: "2.8rem" }} 
+            variant="outlined" 
+            startIcon={<SendIcon />}
+            onClick={mail}>
+            Send Email
+          </Button>{" "}
+          <Button 
+            style={{ width: "80%", height: "2.8rem" }}
             variant="outlined"
             className=""
             onClick={() => router.push(`/student/add/${id}`)}
@@ -57,7 +74,8 @@ export default function CourseDetails() {
             <i className="fa fa-plus mr-2"></i>
             Add Student
           </Button>{" "}
-          <Button
+          <Button 
+            style={{ width: "80%", height: "2.8rem" }}
             variant="outlined"
             className=""
             onClick={() => router.push(`/student/add/file/${id}`)}

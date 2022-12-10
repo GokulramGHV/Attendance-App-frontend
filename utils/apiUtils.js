@@ -112,3 +112,7 @@ export const filetest = (sid, cid) => {
 export const all_sessions_attendance = (cid) => {
   return request(`all_sessions_attendance/${cid}/`, "GET", {}, "blob");
 };
+
+export const send_email = (data) => {
+  return request(`sendemail/`, "POST", data);
+}
