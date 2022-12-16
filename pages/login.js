@@ -4,18 +4,22 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loading from "../components/Loading";
 import { login } from "../utils/apiUtils";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const submit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const resp = await login(username, password);
       localStorage.setItem("token", resp.key);
       localStorage.setItem("login", "true");
+      setLoading(false);
       router.push("home");
     } catch (err) {
       // console.log(err);
@@ -25,6 +29,7 @@ export default function Login() {
           toast.error(`${err.non_field_errors[i]}`);
         }
       } else {
+        setLoading(false);
         toast.error("Something went wrong!");
       }
     }
@@ -35,44 +40,47 @@ export default function Login() {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center flex-col">
-      <ToastContainer />
-      <h1 className="text-3xl font-bold mb-10">Attendance App</h1>
+    <>
+      <Loading isLoading={loading} />
+      <div className="h-screen flex justify-center items-center flex-col">
+        <ToastContainer />
+        <h1 className="text-3xl font-bold mb-10">Attendance App</h1>
 
-      <form onSubmit={submit}>
-        <div className="grid gap-6">
-          <TextField
-            required
-            label="Username"
-            value={username}
-            onChange={(e) => {
-              handleOnChange(e.target.value, setUsername);
-            }}
-          />
-          <TextField
-            label="Password"
-            type="password"
-            required
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => {
-              handleOnChange(e.target.value, setPassword);
-            }}
-          />
-        </div>
-        <div className="flex gap-[1.3rem] mt-12">
-          <ButtonBase
-            // onClick={submit}
-            type="submit"
-            className="text-lg px-6 py-2 bg-blue-600 ring-blue-600 ring-2 rounded-md text-white shadow-lg"
-          >
-            Log In
-          </ButtonBase>
-          <ButtonBase className="text-lg px-5 py-2 ring-blue-600 ring-2 rounded-md text-blue-600 shadow-lg">
-            <Link href="/signup">Sign Up</Link>
-          </ButtonBase>
-        </div>
-      </form>
-    </div>
+        <form onSubmit={submit}>
+          <div className="grid gap-6">
+            <TextField
+              required
+              label="Username"
+              value={username}
+              onChange={(e) => {
+                handleOnChange(e.target.value, setUsername);
+              }}
+            />
+            <TextField
+              label="Password"
+              type="password"
+              required
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => {
+                handleOnChange(e.target.value, setPassword);
+              }}
+            />
+          </div>
+          <div className="flex gap-[1.5rem] mt-12">
+            <ButtonBase
+              // onClick={submit}
+              type="submit"
+              className="text-lg px-6 py-2 bg-blue-600 ring-blue-600 ring-2 rounded-md text-white shadow-lg"
+            >
+              Log In
+            </ButtonBase>
+            <ButtonBase className="text-lg px-5 py-2 ring-blue-600 ring-2 rounded-md text-blue-600 shadow-lg">
+              <Link href="/signup">Sign Up</Link>
+            </ButtonBase>
+          </div>
+        </form>
+      </div>
+    </>
   );
 }
