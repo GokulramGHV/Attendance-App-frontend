@@ -1,5 +1,5 @@
-// const API_BASE_URL = 'https://capstone-301-task-app.herokuapp.com/api/';
-const API_BASE_URL = "http://127.0.0.1:8000/";
+const API_BASE_URL = "https://attendanceapp.up.railway.app/";
+// const API_BASE_URL = "http://127.0.0.1:8000/";
 
 export const request = async (
   endpoint,
@@ -115,4 +115,12 @@ export const all_sessions_attendance = (cid) => {
 
 export const getUser = () => {
   return request("auth/user/", "GET");
+};
+
+export const register = (data) => {
+  return request("auth/registration/", "POST", data);
+};
+
+export const updateUser = (data) => {
+  return request("auth/user/", "PATCH", data);
 };
