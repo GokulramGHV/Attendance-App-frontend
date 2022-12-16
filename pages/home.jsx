@@ -85,7 +85,6 @@ export default function Home() {
             <h3 className="text-lg font-semibold mb-3 mt-5 mx-10">
               {WEEK_DAYS[getDayNum(datee)]}
             </h3>
-            {console.log("Hello njm:", getDayNum(datee))}
             {weekDaysTable[getDayNum(datee)].length === 0 && (
               <div className="text-lg text-gray-600 font-semibold flex justify-center rounded-lg px-8 py-4 mx-10 shadow-md border-[2px] border-gray-200 mb-4">
                 No Time Table Entry found!
