@@ -53,6 +53,11 @@ export default function Course() {
           Add Course
         </Button>
         <div className="grid gap-4 drop-shadow-lg mt-5">
+          {courses.length === 0 && (
+            <div className="flex justify-center items-center gap-5 mx-10 px-8 py-4 text-lg font-medium bg-white rounded-xl shadow">
+              No Courses Found!
+            </div>
+          )}
           {courses.map((course, i) => {
             return (
               <div

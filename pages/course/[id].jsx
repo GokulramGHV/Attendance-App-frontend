@@ -7,18 +7,22 @@ import BottomNav from "../../components/BottomNav";
 // import AddStudent from "../../components/AddStudent";
 import { getCourse, getCourseStudents } from "../../utils/apiUtils";
 import "react-toastify/dist/ReactToastify.css";
+import Loading from "../../components/Loading";
 export default function CourseDetails() {
   const router = useRouter();
   const { id } = router.query;
 
   const [details, setDetails] = useState({});
   const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchData = useCallback(async () => {
+    setLoading(true);
     const data = await getCourse(id);
     const student_data = await getCourseStudents(id);
     setDetails(data);
     setStudents(student_data);
+    setLoading(false);
   }, [id]);
 
   useEffect(() => {
@@ -38,12 +42,13 @@ export default function CourseDetails() {
 
   return (
     <>
+      <Loading isLoading={loading} />
       <ToastContainer />
       <div className="max-h-full py-16">
         <ButtonAppBar title="Courses" />
         <div className="grid gap-4 drop-shadow-lg mt-5 px-10">
           <h2 className="text-xl font-bold">Course Details</h2>
-          <p>{details.name}</p>
+          <p className="font-medium">{details.name}</p>
           <p>Course ID: {details.id}</p>
           <p>No. of students enrolled: {students.length}</p>
         </div>
@@ -69,6 +74,11 @@ export default function CourseDetails() {
         </div>
 
         <div className="w-full mt-5">
+          {students.length === 0 && (
+            <div className="text-lg text-gray-600 font-semibold flex justify-center rounded-lg px-8 py-4 mx-10 shadow-md border-[2px] border-gray-200 mb-4">
+              No students have enrolled!
+            </div>
+          )}
           {students.map((student) => {
             return (
               <div

@@ -30,7 +30,13 @@ export default function AttendanceHome() {
       <ToastContainer />
       <div className="min-h-screen py-16">
         <ButtonAppBar title="Attendance" />
+        <h2 className="mx-10 text-2xl font-bold mt-5">Courses List</h2>
         <div className="grid gap-4 drop-shadow-lg mt-5">
+          {courses.length === 0 && (
+            <div className="flex justify-center items-center gap-5 mx-10 px-8 py-4 text-lg font-medium bg-white rounded-xl shadow">
+              No courses found!
+            </div>
+          )}
           {courses.map((course, i) => {
             return (
               <div

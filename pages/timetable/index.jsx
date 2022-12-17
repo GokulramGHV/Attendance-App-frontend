@@ -84,6 +84,15 @@ export default function TimeTable() {
                   })}
                 </div>
               );
+            else
+              return (
+                <div key={i}>
+                  <h3 className="text-lg font-semibold mb-3 mx-10">{day}</h3>
+                  <div className="text-lg text-gray-600 font-semibold flex justify-center rounded-lg px-8 py-4 mx-10 shadow-md border-[2px] border-gray-200 mb-4">
+                    No Time Table Entry found!
+                  </div>
+                </div>
+              );
           })}
         </div>
         <div className="fixed bg-white bottom-0 flex justify-center border-t-2 w-full">
