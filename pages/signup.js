@@ -18,6 +18,10 @@ export default function SignUp() {
   const router = useRouter();
   const submit = async (e) => {
     e.preventDefault();
+    if (state.password1 !== state.password2) {
+      toast.error("Passwords do not match!");
+      return;
+    }
     try {
       setLoading(true);
       const resp = await register(state);
@@ -27,7 +31,7 @@ export default function SignUp() {
       });
       toast.success("Account created successfully!");
       setLoading(false);
-      router.push("/login");
+      router.push("/home");
     } catch (err) {
       setLoading(false);
       // console.log(err);
@@ -49,10 +53,10 @@ export default function SignUp() {
     <>
       <ToastContainer />
       <Loading isLoading={loading} />
-      <div className="h-screen flex justify-center items-center flex-col">
+      <div className="h-screen flex justify-center items-center flex-col px-10">
         <h1 className="text-3xl font-bold mb-10">Attendance App</h1>
-        <form onSubmit={submit}>
-          <div className="grid gap-6">
+        <form onSubmit={submit} className="w-full">
+          <div className="grid gap-4">
             <TextField
               required
               label="Username"
@@ -88,10 +92,10 @@ export default function SignUp() {
               onChange={(e) => handleOnChange(e, "password2")}
             />
           </div>
-          <div className="flex gap-[1.3rem] mt-12">
+          <div className="flex gap-[1.3rem] mt-10">
             <ButtonBase
               type="submit"
-              className="text-lg px-7 py-2 bg-blue-600 ring-blue-600 ring-2 rounded-md text-white shadow-lg"
+              className="text-lg px-7 py-2 bg-blue-600 ring-blue-600 ring-2 rounded-md text-white shadow-lg w-full"
             >
               Sign Up
             </ButtonBase>

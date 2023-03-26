@@ -1,14 +1,13 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
 import ButtonAppBar from "../../../../../components/Appbar";
 import BottomNav from "../../../../../components/BottomNav";
 import {
+  API_BASE_URL,
   getCourseStudents,
   getSessionAttendance,
 } from "../../../../../utils/apiUtils";
-import "react-toastify/dist/ReactToastify.css";
-import { Button } from "@mui/material";
+import { Button, Card, CardContent } from "@mui/material";
 import axios from "axios";
 
 export default function ListSessions() {
@@ -43,71 +42,77 @@ export default function ListSessions() {
 
   return (
     <>
-      <ToastContainer />
-      <div className="min-h-screen py-16">
+      <div className="min-h-screen py-16 px-10">
         <ButtonAppBar title="Attendance" />
-        <div className="grid gap-4 drop-shadow-lg mt-5">
-          <div className="mx-10">
-            <h1 className="font-semibold text-xl mb-2">
-              Session ID: {sessionId}
-            </h1>
-            <p>
-              No. of students present:{" "}
+        <h1 className="font-semibold text-xl mb-2 mt-5 text-gray-800">
+          Session ID: {sessionId}
+        </h1>
+        <Card variant="outlined">
+          <CardContent className="pb-4">
+            <p className="text-gray-500">
+              <span className="font-medium">No. of students present:</span>{" "}
               {allStudents.length - absentStudents.length}
             </p>
-            <p>No. of students absent: {absentStudents.length}</p>
-            <p>Total no. of students: {allStudents.length}</p>
-            <Button
-              variant="outlined"
-              className="mt-5"
-              onClick={async () => {
-                axios
-                  .get(
-                    `http://127.0.0.1:8000/filetest/${courseId}/${sessionId}/`,
-                    {
-                      method: "GET",
-                      responseType: "blob", // important
-                      headers: {
-                        Authorization:
-                          "Bearer " + localStorage.getItem("token"),
-                      },
-                    }
-                  )
-                  .then((response) => {
-                    const url = window.URL.createObjectURL(
-                      new Blob([response.data])
-                    );
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.setAttribute("download", `${Date.now()}.xlsx`);
-                    document.body.appendChild(link);
-                    link.click();
-                  });
-              }}
-            >
-              <i className="fa fa-plus mr-2"></i>
-              Export Attendance
-            </Button>
-          </div>
-
+            <p className="text-gray-500">
+              <span className="font-medium">No. of students absent:</span>{" "}
+              {absentStudents.length}
+            </p>
+            <p className="text-gray-500">
+              <span className="font-medium">Total no. of students:</span>{" "}
+              {allStudents.length}
+            </p>
+            {/* <p className="text-sm text-gray-500">
+                  <span className="font-medium">Datetime:</span>{" "}
+                  {new Date(session.session).toDateString()}
+                </p> */}
+          </CardContent>
+        </Card>
+        <Button
+          variant="outlined"
+          className="mt-5"
+          onClick={async () => {
+            axios
+              .get(`${API_BASE_URL}filetest/${courseId}/${sessionId}/`, {
+                method: "GET",
+                responseType: "blob", // important
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+              })
+              .then((response) => {
+                const url = window.URL.createObjectURL(
+                  new Blob([response.data])
+                );
+                const link = document.createElement("a");
+                link.href = url;
+                link.setAttribute("download", `${Date.now()}.xlsx`);
+                document.body.appendChild(link);
+                link.click();
+              });
+          }}
+        >
+          <i className="fa fa-plus mr-2"></i>
+          Export Attendance
+        </Button>
+        <div className="grid gap-4 mt-5">
           {allStudents.map((student) => {
             return (
               <div
                 key={student.id}
                 className={`${
                   absentStudents.includes(student.id)
-                    ? "bg-red-200"
-                    : "bg-green-200"
-                } rounded-lg px-8 py-4 mx-10 shadow-md  mb-4`}
+                    ? "bg-red-200 border-red-300 border-[2px]"
+                    : "bg-green-200 border-green-300 border-[2px]"
+                } rounded-lg px-8 py-4 shadow font-medium  text-gray-800`}
               >
                 {student.reg_no} - {student.name}
               </div>
             );
           })}
         </div>
-        <div className="fixed bg-white bottom-0 flex justify-center border-t-2 w-full">
-          <BottomNav routeNum={2} />
-        </div>
+      </div>
+      <div className="fixed bg-white bottom-0 flex justify-center border-t-2 w-full">
+        <BottomNav routeNum={2} />
       </div>
     </>
   );

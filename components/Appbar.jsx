@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function ButtonAppBar({ title }) {
   const router = useRouter();
@@ -20,8 +21,9 @@ export default function ButtonAppBar({ title }) {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 1 }}
+            onClick={() => router.back()}
           >
-            <MenuIcon />
+            <ArrowBackIcon fontSize="medium" />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {title}

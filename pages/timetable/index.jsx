@@ -1,11 +1,10 @@
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import ButtonAppBar from "../../components/Appbar";
 import BottomNav from "../../components/BottomNav";
 import { getTimetables } from "../../utils/apiUtils";
-import "react-toastify/dist/ReactToastify.css";
 
 export const WEEK_DAYS = [
   "Monday",
@@ -28,13 +27,8 @@ export default function TimeTable() {
   };
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      router.push("/login");
-      return;
-    } else {
-      fetchData();
-    }
-  }, [router]);
+    fetchData();
+  }, []);
 
   useEffect(() => {
     let l = localStorage.getItem("timetable_created");
@@ -51,28 +45,30 @@ export default function TimeTable() {
 
   return (
     <>
-      <ToastContainer />
-      <div className="min-h-screen py-16">
+      <div className="min-h-screen py-16 px-10">
         <ButtonAppBar title="Timetable" />
+        <h2 className=" text-2xl font-bold mt-5 text-gray-800">
+          Timetable Entries
+        </h2>
         <Button
           variant="outlined"
-          className="mx-10 mt-10"
+          className="mt-4"
           onClick={() => router.push("/timetable/add")}
         >
           <i className="fa fa-plus mr-2"></i>
           Add Timetable Entry
         </Button>
-        <div className="grid gap-4 drop-shadow-lg mt-5">
+        <div className="grid gap-4 mt-5">
           {WEEK_DAYS.map((day, i) => {
             if (weekDaysTable[i].length > 0)
               return (
                 <div key={i}>
-                  <h3 className="text-lg font-semibold mb-3 mx-10">{day}</h3>
+                  <h3 className="text-lg font-semibold mb-3">{day}</h3>
                   {weekDaysTable[i].map((elem, idx) => {
                     return (
                       <div
                         key={idx}
-                        className="rounded-lg px-8 py-4 mx-10 shadow-md border-[2px] border-gray-200 mb-4"
+                        className="rounded-lg px-8 py-4 shadow-md border-[2px] border-gray-200 mb-4"
                       >
                         <p className="font-medium">{elem.course.name}</p>
                         <div className="mt-1 text-gray-500 text-sm">
@@ -87,17 +83,17 @@ export default function TimeTable() {
             else
               return (
                 <div key={i}>
-                  <h3 className="text-lg font-semibold mb-3 mx-10">{day}</h3>
-                  <div className="text-lg text-gray-600 font-semibold flex justify-center rounded-lg px-8 py-4 mx-10 shadow-md border-[2px] border-gray-200 mb-4">
+                  <h3 className="text-lg font-semibold mb-3">{day}</h3>
+                  <div className="text-gray-700 font-medium flex justify-center rounded-lg px-8 py-4 shadow-md border-[2px] border-gray-200 mb-4">
                     No Time Table Entry found!
                   </div>
                 </div>
               );
           })}
         </div>
-        <div className="fixed bg-white bottom-0 flex justify-center border-t-2 w-full">
-          <BottomNav routeNum={3} />
-        </div>
+      </div>
+      <div className="fixed bg-white bottom-0 flex justify-center border-t-2 w-full z-50">
+        <BottomNav routeNum={3} />
       </div>
     </>
   );

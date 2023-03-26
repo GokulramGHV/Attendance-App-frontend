@@ -2,8 +2,7 @@ import { Button, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import ButtonAppBar from "../components/Appbar";
 import BottomNav from "../components/BottomNav";
 import Loading from "../components/Loading";
@@ -32,23 +31,13 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      router.push("/login");
-      return;
-    } else {
-      fetchData();
-      const fetchUserData = async () => {
-        const data = await getUser();
-        setUser(data);
-      };
-      fetchUserData();
-      let l = localStorage.getItem("login");
-      if (l === "true") {
-        toast.success("Login Sucessful!");
-        localStorage.setItem("login", "false");
-      }
-    }
-  }, [router, fetchData]);
+    fetchData();
+    const fetchUserData = async () => {
+      const data = await getUser();
+      setUser(data);
+    };
+    fetchUserData();
+  }, [fetchData]);
 
   const weekDaysTable = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };
   timetables.forEach((timetable) => {
@@ -63,10 +52,10 @@ export default function Home() {
   return (
     <>
       <Loading isLoading={isLoading} />
-      <div className="min-h-screen py-16">
+      <div className="min-h-screen py-16 px-10">
         <ButtonAppBar title="Home" />
-        <div className="grid gap-4 drop-shadow-lg mt-5">
-          <h1 className="mx-10 text-2xl font-bold text-gray-700 mt-2">
+        <div className="grid gap-4 mt-5">
+          <h1 className="text-2xl font-bold text-gray-800 mt-2">
             Hi, {user.first_name}!
           </h1>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -76,71 +65,67 @@ export default function Home() {
               onChange={(newValue) => {
                 setDatee(newValue);
               }}
-              className="mx-10"
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
 
-          <div>
-            <h3 className="text-lg font-semibold mb-3 mt-5 mx-10">
-              {WEEK_DAYS[getDayNum(datee)]}
-            </h3>
-            {weekDaysTable[getDayNum(datee)].length === 0 && (
-              <div className="text-lg text-gray-600 font-semibold flex justify-center rounded-lg px-8 py-4 mx-10 shadow-md border-[2px] border-gray-200 mb-4">
-                No Time Table Entry found!
-              </div>
-            )}
-            {weekDaysTable[getDayNum(datee)].map((elem, idx) => {
-              return (
-                <div
-                  key={idx}
-                  className="flex justify-between rounded-lg px-8 py-4 mx-10 shadow-md border-[2px] border-gray-200 mb-4"
-                >
-                  <div>
-                    <p className="font-medium">{elem.course.name}</p>
-                    <div className="mt-1 text-gray-500 text-sm">
-                      {" "}
-                      {elem.start_time} - {elem.end_time}
-                    </div>
-                  </div>
-                  <div className="flex">
-                    <Button
-                      variant="outlined"
-                      onClick={async () => {
-                        setIsLoading(true);
-                        let session_datetime = new Date(datee);
-                        let time = elem.start_time.split(":");
-                        console.log("Time:", time[0], time[1], time[2]);
-                        session_datetime.setHours(
-                          Number(time[0]),
-                          Number(time[1]),
-                          Number(time[2])
-                        );
-                        const session_data = await createSession({
-                          session: session_datetime,
-                          course: elem.course.id,
-                          block_hours: elem.course.block_hours,
-                        });
-                        console.log("session_data: ", session_data);
-                        router.push(
-                          `/attendance/create/${elem.course.id}/${session_data.id}/`
-                        );
-                        setIsLoading(false);
-                      }}
-                    >
-                      Mark
-                    </Button>
+          <h3 className="text-lg font-semibold mt-5 font-gray-800">
+            {WEEK_DAYS[getDayNum(datee)]}
+          </h3>
+          {weekDaysTable[getDayNum(datee)].length === 0 && (
+            <div className="text-gray-700 font-medium flex justify-center rounded-lg py-4 shadow-md border-[2px] border-gray-200 mb-4 ">
+              No Time Table Entry found!
+            </div>
+          )}
+          {weekDaysTable[getDayNum(datee)].map((elem, idx) => {
+            return (
+              <div
+                key={idx}
+                className="flex justify-between rounded-lg px-8 py-4 shadow-md border-[2px] border-gray-200 mb-4"
+              >
+                <div>
+                  <p className="font-medium">{elem.course.name}</p>
+                  <div className="mt-1 text-gray-500 text-sm">
+                    {" "}
+                    {elem.start_time} - {elem.end_time}
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-        <div className="fixed bg-white bottom-0 flex justify-center border-t-2 w-full">
-          <BottomNav routeNum={0} />
+                <div className="flex">
+                  <Button
+                    variant="outlined"
+                    onClick={async () => {
+                      setIsLoading(true);
+                      let session_datetime = new Date(datee);
+                      let time = elem.start_time.split(":");
+                      console.log("Time:", time[0], time[1], time[2]);
+                      session_datetime.setHours(
+                        Number(time[0]),
+                        Number(time[1]),
+                        Number(time[2])
+                      );
+                      const session_data = await createSession({
+                        session: session_datetime,
+                        course: elem.course.id,
+                        block_hours: elem.course.block_hours,
+                      });
+                      console.log("session_data: ", session_data);
+                      router.push(
+                        `/attendance/create/${elem.course.id}/${session_data.id}/`
+                      );
+                      setIsLoading(false);
+                    }}
+                  >
+                    Mark
+                  </Button>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
-      <ToastContainer />
+      <div className="fixed bg-white bottom-0 flex justify-center border-t-2 w-full">
+        <BottomNav routeNum={0} />
+      </div>
     </>
   );
 }

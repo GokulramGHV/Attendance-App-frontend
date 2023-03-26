@@ -1,11 +1,10 @@
 import { ButtonBase, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import ButtonAppBar from "../../../../components/Appbar";
 import BottomNav from "../../../../components/BottomNav";
 import { createStudent } from "../../../../utils/apiUtils";
-import "react-toastify/dist/ReactToastify.css";
 import { read } from "xlsx";
 import { utils } from "xlsx";
 export default function AddStudentBulk() {
@@ -14,16 +13,12 @@ export default function AddStudentBulk() {
   const { courseId } = router.query;
   useEffect(() => {
     if (!courseId) return;
-    if (!localStorage.getItem("token")) {
-      router.push("/login");
-      return;
-    }
     // else {
     //   setStudentData((state) => {
     //     return { ...state, course_enrolled: courseId };
     //   });
     // }
-  }, [router, courseId]);
+  }, [courseId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,7 +31,7 @@ export default function AddStudentBulk() {
         });
         console.log(submit_data);
       }
-      localStorage.setItem("student_created", "true");
+      toast.success("Students added successfully!");
       router.push(`/course/${courseId}`);
     } catch (err) {
       console.log(err);
@@ -62,7 +57,6 @@ export default function AddStudentBulk() {
 
   return (
     <>
-      <ToastContainer />
       <ButtonAppBar title="Students" />
       <div className="min-h-screen py-16 flex justify-center items-center px-10">
         <form onSubmit={handleSubmit} className="w-full grid gap-4">

@@ -1,12 +1,11 @@
 import { ButtonBase, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import ButtonAppBar from "../../components/Appbar";
 import BottomNav from "../../components/BottomNav";
 import { createTimetableEntry, getCourses } from "../../utils/apiUtils";
 import MenuItem from "@mui/material/MenuItem";
-import "react-toastify/dist/ReactToastify.css";
 import { WEEK_DAYS } from ".";
 
 export default function TimeTableAdd() {
@@ -25,20 +24,15 @@ export default function TimeTableAdd() {
   };
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      router.push("/login");
-      return;
-    } else {
-      fetchData();
-    }
-  }, [router]);
+    fetchData();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submit data: ", timetableData);
     try {
       const submit_data = await createTimetableEntry(timetableData);
-      localStorage.setItem("timetable_created", "true");
+      toast.success("Timetable Entry Created!");
       router.push("/timetable");
     } catch (err) {
       console.log(err);
@@ -54,7 +48,6 @@ export default function TimeTableAdd() {
 
   return (
     <>
-      <ToastContainer />
       <ButtonAppBar title="Timetable" />
       <div className="min-h-screen py-16 flex justify-center items-center px-10">
         <form onSubmit={handleSubmit} className="w-full grid gap-4">

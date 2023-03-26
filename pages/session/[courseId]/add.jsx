@@ -1,11 +1,10 @@
 import { ButtonBase, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import ButtonAppBar from "../../../components/Appbar";
 import BottomNav from "../../../components/BottomNav";
 import { createSession, getCourse } from "../../../utils/apiUtils";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function TimeTableAdd() {
   const [datetime, setDatetime] = useState("");
@@ -14,10 +13,6 @@ export default function TimeTableAdd() {
   const { courseId } = router.query;
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      router.push("/login");
-      return;
-    }
     const fetchCourseData = async () => {
       try {
         const data = await getCourse(courseId);
@@ -26,9 +21,8 @@ export default function TimeTableAdd() {
         console.log(err);
       }
     };
-
     fetchCourseData();
-  }, [router, courseId]);
+  }, [courseId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,7 +48,6 @@ export default function TimeTableAdd() {
 
   return (
     <>
-      <ToastContainer />
       <ButtonAppBar title="Attendance" />
       <div className="min-h-screen py-16 flex justify-center items-center px-10">
         <form onSubmit={handleSubmit} className="w-full grid gap-4">

@@ -1,5 +1,5 @@
-const API_BASE_URL = "https://attendanceapp.up.railway.app/";
-// const API_BASE_URL = "http://127.0.0.1:8000/";
+// const API_BASE_URL = "https://attendanceapp.up.railway.app/";
+export const API_BASE_URL = "http://127.0.0.1:8000/";
 
 export const request = async (
   endpoint,
@@ -25,7 +25,7 @@ export const request = async (
   // Token Authentication
   const token = localStorage.getItem("token");
   // console.log(token);
-  const auth = token ? "Bearer " + localStorage.getItem("token") : "";
+  const auth = token ? "Bearer " + token : "";
   const response = await fetch(url, {
     // mode: "no-cors",
     method: method,
@@ -79,6 +79,10 @@ export const createTimetableEntry = (data) => {
 
 export const createSession = (data) => {
   return request("sessions/", "POST", data);
+};
+
+export const getSessionDetails = (id) => {
+  return request(`sessions/${id}/`, "GET");
 };
 
 export const submitAttendance = (data) => {

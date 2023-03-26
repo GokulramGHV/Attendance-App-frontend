@@ -6,7 +6,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+  font-family: "Roboto", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
@@ -17,12 +17,14 @@ a {
 
 * {
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 .body-class {
   overflow: hidden;
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   html {
     color-scheme: light;
   }
@@ -30,4 +32,4 @@ a {
     color: white;
     background: black;
   }
-}
+} */
