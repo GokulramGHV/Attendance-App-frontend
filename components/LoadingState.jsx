@@ -20,6 +20,6 @@ export default function LoadingState() {
       router.events.off("routeChangeComplete", handleComplete);
       router.events.off("routeChangeError", handleComplete);
     };
-  });
+  }, [router]);
   return <Loading isLoading={loading} />;
 }

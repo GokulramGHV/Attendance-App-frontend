@@ -31,7 +31,7 @@ export default function TakeAttendance() {
     }
     console.log(data);
     setCourseStudents(data);
-  }, [courseId]);
+  }, [courseId, sessionId]);
 
   useEffect(() => {
     if (!courseId || !sessionId) return;

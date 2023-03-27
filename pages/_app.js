@@ -8,14 +8,17 @@ import { useRouter } from "next/router";
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   useEffect(() => {
+    if (router.pathname === "/signup" || router.pathname === "/login") {
+      return;
+    }
     if (!localStorage.getItem("token")) {
       router.push("/login");
       return;
     }
-  }, []);
+  }, [router]);
   return (
     <>
-      <LoadingState />
+      {/* <LoadingState router={router} /> */}
       <StyledEngineProvider injectFirst>
         <Component {...pageProps} />
       </StyledEngineProvider>
